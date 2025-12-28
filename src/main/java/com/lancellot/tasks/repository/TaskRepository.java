@@ -1,4 +1,7 @@
 package com.lancellot.tasks.repository;
 
-public class TaskRepository {
+import com.lancellot.tasks.domain.TaskDocument;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface TaskRepository extends MongoRepository<TaskDocument, Integer> {
 }
