@@ -2,7 +2,6 @@ package com.lancellot.tasks.service.transformer;
 
 import com.lancellot.tasks.api.enums.FileType;
 import com.lancellot.tasks.config.AwsProps;
-import com.lancellot.tasks.domain.TaskDocument;
 import com.lancellot.tasks.domain.TaskItem;
 import com.lancellot.tasks.repository.TaskRepository;
 import com.opencsv.CSVReader;
@@ -17,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class CsvTaskTransformer extends BaseTransformerTask implements  TaskTransformer {
+public class TaskTransformerCsv extends TaskTransformerBase implements ITaskTransformer {
 
-    public CsvTaskTransformer(S3Client s3Client, AwsProps awsProps, TaskRepository taskRepository) {
+    public TaskTransformerCsv(S3Client s3Client, AwsProps awsProps, TaskRepository taskRepository) {
         super(s3Client, awsProps.s3().bucket(), taskRepository);
     }
 
@@ -31,26 +30,11 @@ public class CsvTaskTransformer extends BaseTransformerTask implements  TaskTran
     @Override
     public void transform(String linkToS3) {
 
-        try {
-            // Download CSV file from S3
-            byte[] csvBytes = download(linkToS3);
-            String csvContent = new String(csvBytes, StandardCharsets.UTF_8);
+        byte[] csvBytes = download(linkToS3);
+        String csvContent = new String(csvBytes, StandardCharsets.UTF_8);
 
-            List<String> lines = csvContent.lines().toList();
-
-            // Parse CSV
-            List<TaskItem> taskItems = parseCsv(csvContent);
-
-            // Save to database
-            TaskDocument taskDocument = new TaskDocument();
-            taskDocument.setFileName(linkToS3);
-            taskDocument.setTaskItems(new ArrayList<>(taskItems));
-
-            taskRepository.save(taskDocument);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to process CSV file: " + linkToS3, e);
-        }
+        List<TaskItem> taskItems = parseCsv(csvContent);
+        saveTaskDocument(linkToS3, taskItems);
     }
 
     private List<TaskItem> parseCsv(String csvContent) {

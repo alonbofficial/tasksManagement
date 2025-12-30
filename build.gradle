@@ -44,3 +44,12 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+graalvmNative {
+    binaries {
+        main {
+            imageName = 'tasks-service'
+            mainClass = 'com.lancellot.tasks.TasksServiceApplication'
+        }
+    }
+}

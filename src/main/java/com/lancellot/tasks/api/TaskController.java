@@ -6,9 +6,11 @@ import com.lancellot.tasks.api.dto.TaskResponse;
 import com.lancellot.tasks.api.dto.TransformRequest;
 import com.lancellot.tasks.service.TaskService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,11 +28,9 @@ public class TaskController {
     }
 
     @GetMapping("/{fileName}")
-    public ResponseEntity<TaskDocumentDto> getTasksFromFile(@PathVariable @NotNull String fileName) {
+    public ResponseEntity<TaskDocumentDto> getTasksFromFile(@PathVariable String fileName) {
 
         TaskDocumentDto taskDocumentDto = taskService.getTasksFromFile(fileName);
-        //TaskResponse taskResponse = new TaskResponse();
-        //taskResponse.setTaskDocumentDto(taskDocumentDto);
         return ResponseEntity.ok(taskDocumentDto);
     }
 }

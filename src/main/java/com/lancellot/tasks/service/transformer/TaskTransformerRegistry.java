@@ -10,13 +10,13 @@ import java.util.Map;
 @Component
 public class TaskTransformerRegistry{
 
-    private final Map<FileType, TaskTransformer> mapFileTypeToTransformer;
+    private final Map<FileType, ITaskTransformer> mapFileTypeToTransformer;
 
-    public TaskTransformerRegistry(List<TaskTransformer> transformers) {
+    public TaskTransformerRegistry(List<ITaskTransformer> transformers) {
 
-        EnumMap<FileType, TaskTransformer> tmpFileTypeToTransformerMap = new EnumMap<>(FileType.class);
+        EnumMap<FileType, ITaskTransformer> tmpFileTypeToTransformerMap = new EnumMap<>(FileType.class);
 
-        for (TaskTransformer t : transformers) {
+        for (ITaskTransformer t : transformers) {
             FileType type = t.supports();
             if (tmpFileTypeToTransformerMap.put(type, t) != null) {
                 throw new IllegalStateException("Duplicate transformer for type: " + type);
@@ -26,7 +26,7 @@ public class TaskTransformerRegistry{
         this.mapFileTypeToTransformer = Map.copyOf(tmpFileTypeToTransformerMap);
     }
 
-    public TaskTransformer getMapValByFileType(FileType type) {
+    public ITaskTransformer getMapValByFileType(FileType type) {
         return mapFileTypeToTransformer.get(type);
     }
 }
