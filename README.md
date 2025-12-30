@@ -195,3 +195,8 @@ The service includes custom exception handling:
 - Webhooks for S3 event notifications
 - Task completion tracking
 - User authentication and authorization
+
+## Documentation
+
+<img width="1495" height="2431" alt="Untitled Diagram" src="https://github.com/user-attachments/assets/ed76ecb6-f0b8-49c3-867e-362feea36268" />
+
