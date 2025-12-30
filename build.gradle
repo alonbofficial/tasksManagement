@@ -50,6 +50,7 @@ graalvmNative {
         main {
             imageName = 'tasks-service'
             mainClass = 'com.lancellot.tasks.TasksServiceApplication'
+            buildArgs.add('-H:-CheckToolchain')
         }
     }
 }

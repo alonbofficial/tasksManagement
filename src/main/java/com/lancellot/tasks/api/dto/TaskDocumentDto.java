@@ -1,14 +1,13 @@
 package com.lancellot.tasks.api.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
 
 import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@Setter
-public class TaskDocumentDto {
+@Builder
+public record TaskDocumentDto (
 
-    String fileName; //link_to_s3_object
-    ArrayList<TaskItemDto> taskItems;
-}
+    String fileName, //link_to_s3_object
+    List<TaskItemDto> taskItems
+){}
