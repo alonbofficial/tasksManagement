@@ -130,7 +130,20 @@ The service requires the following IAM permissions:
 - JDK 21
 - MongoDB running on localhost:27017
 - AWS credentials configured
+  - `AWS_ACCESS_KEY_ID`
+  - `AWS_SECRET_ACCESS_KEY`
 - S3 bucket with task files
+
+### AWS Credentials Setup
+
+Set your AWS credentials as system environment variables:
+
+**Windows (PowerShell):**
+```powershell
+$env:AWS_ACCESS_KEY_ID = "your-access-key-id"
+$env:AWS_SECRET_ACCESS_KEY = "your-secret-access-key"
+```
+
 
 ### Standard Run
 ```bash
