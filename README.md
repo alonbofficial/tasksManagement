@@ -9,7 +9,7 @@ This service automatically transforms task documents uploaded to AWS S3 into str
 ## Features
 
 - **Multi-format Support**: Processes CSV, TXT, and image files (PNG/JPG)
-- **AWS Integration**: 
+- **AWS Integration**:
   - Retrieves files from AWS S3
   - Uses AWS Textract for OCR text extraction from images
 - **Intelligent Parsing**: Extracts numbered task lists from various text formats
@@ -35,13 +35,35 @@ This service automatically transforms task documents uploaded to AWS S3 into str
 
 ## Architecture
 
-The service follows a transformer pattern where each file type has a dedicated transformer:
+The service implements a clean, extensible architecture with the following components:
 
-- `CsvTaskTransformer` - Processes CSV files with headers
-- `TxtTaskTransformer` - Processes plain text task lists
-- `ImageTaskTransformer` - Uses AWS Textract to extract text from images
+- **Controllers**: Handle HTTP requests and responses
+- **Services**: Contain business logic and orchestrate transformers
+- **Transformers**: Process different file types (CSV, TXT, Image)
+- **Repositories**: Manage data persistence with MongoDB
+- **DTOs**: Transfer data between layers
 
-All transformers extend `BaseTransformerTask` which provides common functionality for downloading files from S3, parsing tasks, and saving to MongoDB.
+### Design Patterns
+
+This application implements the **Strategy Pattern** for file processing:
+
+- **Strategy Interface**: `TaskTransformer` defines the contract for all file processors
+- **Concrete Strategies**:
+  - `CsvTaskTransformer` - Handles CSV files using OpenCSV
+  - `TxtTaskTransformer` - Handles plain text files
+  - `ImageTaskTransformer` - Handles images using AWS Textract OCR
+- **Context**: The service dynamically selects the appropriate transformer based on file type at runtime
+
+**Benefits:**
+- Easy to add new file formats without modifying existing code
+- Follows the Open/Closed Principle (open for extension, closed for modification)
+- Each transformer is independently testable and maintainable
+
+**Additional Patterns Used:**
+- **Template Method** - `BaseTransformerTask` provides common functionality (download, parse, save)
+- **Repository Pattern** - Data access abstraction via `TaskRepository`
+- **DTO Pattern** - Separates domain models from API contracts
+- **Dependency Injection** - Spring manages component lifecycle and dependencies
 
 ## API Endpoints
 
@@ -143,7 +165,6 @@ Set your AWS credentials as system environment variables:
 $env:AWS_ACCESS_KEY_ID = "your-access-key-id"
 $env:AWS_SECRET_ACCESS_KEY = "your-secret-access-key"
 ```
-
 
 ### Standard Run
 ```bash
