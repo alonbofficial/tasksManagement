@@ -1,8 +1,11 @@
 package com.lancellot.tasks.api.dto;
 
-import com.lancellot.tasks.api.enums.FileType;
+import lombok.Getter;
+import lombok.Setter;
 
-public record TaskItemDto(
-    String linkToS3,
-    FileType fileType
-) {}
+@Getter
+@Setter
+public class TaskItemDto {
+    Integer number;//mumeric_value_by_order
+    String description; //task_description
+}

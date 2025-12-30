@@ -1,7 +1,9 @@
 package com.lancellot.tasks.api;
 
+import com.lancellot.tasks.api.dto.TaskDocumentDto;
 import com.lancellot.tasks.api.dto.TaskItemDto;
 import com.lancellot.tasks.api.dto.TaskResponse;
+import com.lancellot.tasks.api.dto.TransformRequest;
 import com.lancellot.tasks.service.TaskService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -17,17 +19,18 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping("/transform")
-    public ResponseEntity<?> transformTasks(@RequestBody @Valid TaskItemDto taskItemDto) {
+    public ResponseEntity<?> transformTasks(@RequestBody @Valid TransformRequest transformRequest) {
 
-        taskService.transformTasks(taskItemDto);
+        taskService.transformTasks(transformRequest);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{fileName}")
-    public ResponseEntity<TaskResponse> getTasksFromFile(@PathVariable @NotNull String fileName) {
+    public ResponseEntity<TaskDocumentDto> getTasksFromFile(@PathVariable @NotNull String fileName) {
 
-        // Option 1: return directly from the db using TaskRepository
-        // Option 2: return from TaskService which fetches from the db using TaskRepository
-        return null;
+        TaskDocumentDto taskDocumentDto = taskService.getTasksFromFile(fileName);
+        //TaskResponse taskResponse = new TaskResponse();
+        //taskResponse.setTaskDocumentDto(taskDocumentDto);
+        return ResponseEntity.ok(taskDocumentDto);
     }
 }
